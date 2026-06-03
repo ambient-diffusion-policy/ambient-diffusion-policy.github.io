@@ -3,440 +3,483 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ambient Diffusion Policy: imitation learning from suboptimal robot data by using each dataset only at the diffusion times where it helps.">
+  <meta name="description" content="Ambient Diffusion Policy trains Diffusion Policies with imperfect robot data by matching each data source to the diffusion noise levels where it helps.">
+  <meta name="keywords" content="Ambient Diffusion Policy, Diffusion Policy, imitation learning, robotics, suboptimal data, Open X-Embodiment">
   <meta property="og:title" content="Ambient Diffusion Policy">
-  <meta property="og:description" content="A project page for Ambient Diffusion Policy, a method for learning from suboptimal robot data with noise-dependent data usage.">
+  <meta property="og:description" content="A simple sampler change for learning from imperfect robot data without copying its failures.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="static/images/table-cleaning-task.png">
+  <meta property="og:image" content="static/images/poster-teaser.jpg">
   <title>Ambient Diffusion Policy</title>
-  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
-  <link rel="stylesheet" href="static/css/site.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="static/css/site.css?v=anchor2">
 </head>
 <body>
-  <header class="site-header">
-    <nav class="nav-shell" aria-label="Main navigation">
-      <a class="brand" href="#top" aria-label="Ambient Diffusion Policy home">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span>Ambient Diffusion Policy</span>
-      </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
-      <div class="nav-links" id="site-nav">
-        <a href="#method">Method</a>
-        <a href="#evidence">Evidence</a>
-        <a href="#oxe">OXE</a>
-        <a href="#videos">Videos</a>
-        <a href="#appendix">Appendix</a>
-      </div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Ambient Diffusion Policy home">
+      <img src="favicon.svg" alt="" aria-hidden="true">
+      <span>Ambient Diffusion Policy</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">Menu</button>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="#overview">Overview</a>
+      <a href="#method">Method</a>
+      <a href="#sampler">Implementation</a>
+      <a href="#experiments">Experiments</a>
+      <a href="#rollouts">Example Rollouts</a>
+      <a href="#abstract">Abstract</a>
     </nav>
+    <div class="read-progress" aria-hidden="true"><span></span></div>
   </header>
 
   <main id="top">
-    <section class="hero section-pad">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <h1>Ambient Diffusion Policy</h1>
-          <p class="subtitle">Imitation learning from suboptimal robot data.</p>
-          <p class="hero-claim">
-            Train Diffusion Policies on noisy, simulated, task-mismatched, and large-scale robot data by using each suboptimal dataset only at the diffusion times where it helps.
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="paper-head">
+          <h1>Ambient Diffusion Policy:<br>Imitation Learning from Suboptimal Data in Robotics</h1>
+          <p class="authors">
+            <a href="https://adamwei.com/">Adam Wei</a><sup>*</sup>,
+            <a href="https://giannisdaras.github.io/">Giannis Daras</a><sup>*</sup>,
+            <a href="https://nepfaff.github.io/">Nicholas Pfaff</a><sup>&dagger;</sup>,
+            <a href="https://tommycohn.com/">Thomas Cohn</a><sup>&dagger;</sup>,
+            <a href="https://keremdayi.com/">Arif Kerem Dayi</a>,
+            <a href="https://people.csail.mit.edu/costis/">Costis Daskalakis</a>,
+            <a href="https://locomotion.csail.mit.edu/russt.html">Russ Tedrake</a>
           </p>
+          <p class="author-notes">* Joint first authors. &dagger; Joint second authors.</p>
           <div class="link-row" aria-label="Project links">
-            <a class="link-pill" href="#method">Method</a>
-            <a class="link-pill" href="#evidence">Evidence</a>
-            <a class="link-pill" href="#videos">Videos</a>
-            <a class="link-pill" href="#appendix">Appendix</a>
+            <span class="pill disabled">arXiv coming soon</span>
+            <span class="pill disabled">Code coming soon</span>
+            <span class="pill disabled">YouTube coming soon</span>
           </div>
         </div>
 
-        <div class="teaser-panel" aria-label="Short project overview">
-          <div class="teaser-preview">
-            <div class="teaser-frame">
-              <span class="teaser-label">10s overview</span>
-              <div class="teaser-track" aria-hidden="true">
-                <span></span><span></span><span></span><span></span>
-              </div>
-              <p>Noisy data, diffusion-time gating, and a hardware result in one short pass.</p>
+        <div class="hero-summary">
+          <span>Imperfect robot data still carries signal. Ambient uses the global-to-local structure of action diffusion to keep that signal without learning the failures.</span>
+        </div>
+
+        <div class="reader-path" aria-label="Five minute reading path">
+          <a href="#overview"><span>1</span> Robot data</a>
+          <a href="#method"><span>2</span> Ambient idea</a>
+          <a href="#sampler"><span>3</span> Implementation</a>
+          <a href="#experiments"><span>4</span> Results</a>
+        </div>
+
+        <div class="teaser-placeholder" role="img" aria-label="Ten second teaser video placeholder">
+          <div class="teaser-frame">
+            <span class="play-mark" aria-hidden="true"></span>
+            <div>
+              <strong>10s teaser video</strong>
+              <p>Final overview video will go here.</p>
             </div>
-          </div>
-          <div class="teaser-caption">
-            Designed for a fast read before the paper: what changes, why it helps, and where it works.
-          </div>
-        </div>
-      </div>
-
-      <div class="container stat-strip" aria-label="Key project facts">
-        <div>
-          <strong>One sampler change</strong>
-          <span>Inference remains identical to Diffusion Policy.</span>
-        </div>
-        <div>
-          <strong>Four shift types</strong>
-          <span>Noisy teleop, sim-to-real, task mismatch, and OXE mixtures.</span>
-        </div>
-        <div>
-          <strong>Hardware scaling</strong>
-          <span>Up to 15% on table cleaning and 33% taller towers vs co-training.</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-pad problem-section" id="problem">
-      <div class="container two-column">
-        <div class="section-heading">
-          <span class="section-number">01</span>
-          <h2>Suboptimal robot data is useful, but only in pieces.</h2>
-        </div>
-        <div class="body-copy">
-          <p>
-            Large robot datasets mix expert demonstrations with failures, simulation, other embodiments, task mismatch, and play data. Filtering throws away useful signal. Naive co-training learns the useful and harmful parts together.
-          </p>
-          <p>
-            Ambient Diffusion Policy asks a more granular question: at which diffusion times does a suboptimal sample agree with the target data?
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="walkthrough section-pad" id="method">
-      <div class="container">
-        <div class="section-heading wide-heading">
-          <span class="section-number">02</span>
-          <h2>A scroll walkthrough of the method.</h2>
-          <p>Each step maps directly to a robotics failure mode and a specific part of the diffusion process.</p>
-        </div>
-
-        <div class="walk-grid">
-          <div class="walk-visual" aria-label="Method diagram">
-            <div class="visual-card" id="walk-visual">
-              <div class="noise-axis">
-                <span>Low noise</span>
-                <div class="axis-line"><i></i></div>
-                <span>High noise</span>
-              </div>
-              <div class="diffusion-stack">
-                <div class="time-slice local">
-                  <b>t &lt; t_max</b>
-                  <span>local primitives</span>
-                </div>
-                <div class="time-slice blocked">
-                  <b>skip middle</b>
-                  <span>avoid misaligned features</span>
-                </div>
-                <div class="time-slice global">
-                  <b>t &gt; t_min</b>
-                  <span>global plans</span>
-                </div>
-              </div>
-              <div class="sample-streams">
-                <div class="stream target"><span></span><b>D_p</b><em>high-quality data</em></div>
-                <div class="stream suboptimal"><span></span><b>D_q</b><em>suboptimal data</em></div>
-              </div>
-              <div class="sampler-rule">
-                <code>admit(q_i, t) = t <= t_max_i or t >= t_min_i</code>
-              </div>
-            </div>
-          </div>
-
-          <div class="walk-steps">
-            <article class="walk-card active" data-step="0">
-              <span>Step 1</span>
-              <h3>Suboptimal data contains aligned and misaligned features.</h3>
-              <p>Simulated pushing may share the same high-level strategy but differ in contact dynamics. A wrong-task pick-and-place dataset may share useful grasping primitives but encode the wrong goal.</p>
-            </article>
-            <article class="walk-card" data-step="1">
-              <span>Step 2</span>
-              <h3>Robot action diffusion is global-to-local.</h3>
-              <p>At high noise, denoisers commit to broad plans. At low noise, they refine local motions such as smoothness, grasping, and contact behavior.</p>
-            </article>
-            <article class="walk-card" data-step="2">
-              <span>Step 3</span>
-              <h3>Use suboptimal data only where it agrees.</h3>
-              <p>High noise can mask local defects, enabling global learning from suboptimal data. Low noise can reuse local primitives when local structure is shared.</p>
-            </article>
-            <article class="walk-card" data-step="3">
-              <span>Step 4</span>
-              <h3>Training changes; inference does not.</h3>
-              <p>The policy trains with a custom sampler over admissible samples. At deployment, it runs exactly like a standard Diffusion Policy.</p>
-            </article>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section-pad data-section" id="properties">
-      <div class="container">
-        <div class="section-heading wide-heading">
-          <span class="section-number">03</span>
-          <h2>Why should this work for robots?</h2>
-          <p>The key appendix and main-paper figures become the proof-of-intuition section of the website.</p>
+    <section class="section" id="overview" data-section="overview">
+      <div class="container brief-flow" aria-label="Quick overview">
+        <div class="brief-intro">
+          <span>Quick overview</span>
+          <p>How a small data-loader change improves over filtering or co-training on imperfect robot data.</p>
         </div>
-
-        <div class="figure-feature">
-          <figure>
-            <img src="static/images/robot-data-hierarchy.png" alt="Global-to-local action diffusion hierarchy examples in maze and block sorting.">
-          </figure>
-          <div>
-            <h3>Action diffusion naturally separates planning and refinement.</h3>
-            <p>Robot action data exhibits a spectral power law. That structure induces a global-to-local hierarchy: high-noise denoisers capture global plans, while low-noise denoisers refine local action detail.</p>
-          </div>
-        </div>
-
-        <div class="property-grid">
-          <figure class="property-card">
-            <img src="static/images/psd-oxe.png" alt="Power spectral density in Open X-Embodiment action data.">
-            <figcaption><b>Spectral power law.</b> OXE action data has low-frequency-dominated structure.</figcaption>
-          </figure>
-          <figure class="property-card">
-            <img src="static/images/noise-mask.png" alt="Gaussian noise acting as a high-frequency mask on robot trajectories.">
-            <figcaption><b>Noise as a mask.</b> Increasing noise first hides high-frequency local motion defects.</figcaption>
-          </figure>
-          <figure class="property-card">
-            <img src="static/images/locality.png" alt="Denoiser locality sensitivity field.">
-            <figcaption><b>Locality.</b> Low-noise action estimates depend most on local temporal neighbors.</figcaption>
-          </figure>
-          <figure class="property-card">
-            <img src="static/images/classifier-threshold.png" alt="Classifier output used to choose t_min.">
-            <figcaption><b>Automatic annotation.</b> A classifier estimates the noise level where D_p and D_q become hard to distinguish.</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-pad sampler-section">
-      <div class="container sampler-grid">
-        <div class="section-heading">
-          <span class="section-number">04</span>
-          <h2>The implementation is deliberately small.</h2>
-        </div>
-        <div class="algorithm-card" aria-label="Ambient Diffusion Policy sampler pseudocode">
-<pre><code>for each training step:
-  sample t ~ Uniform(0, T)
-
-  sample from D_p at any t
-  sample q_i from D_q only if:
-      t <= t_max_i     # local
-   or t >= t_min_i     # global
-
-  update the Diffusion Policy denoiser
-
-inference:
-  run the standard Diffusion Policy sampler</code></pre>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-pad evidence-section" id="evidence">
-      <div class="container">
-        <div class="section-heading wide-heading">
-          <span class="section-number">05</span>
-          <h2>Evidence across robotics distribution shifts.</h2>
-          <p>The controlled experiments isolate one failure mode at a time before scaling to mixed real-world data.</p>
-        </div>
-
-        <div class="evidence-grid">
-          <article class="evidence-card">
-            <img src="static/images/maze-rollout-compare.png" alt="Co-trained and Ambient maze rollouts.">
-            <div>
-              <span>Noisy teleoperation</span>
-              <h3>High success without inheriting jitter.</h3>
-              <p>With 50 high-quality GCS trajectories and 5,000 lower-quality RRT trajectories, Ambient matches co-training success while remaining roughly 2x smoother.</p>
-            </div>
+        <div class="brief-steps">
+          <article>
+            <span class="card-index">01</span>
+            <strong>Clean data is scarce.</strong>
+            <p>Expert target demos are expensive. Easier data is messier: failures, simulation, other tasks, and other robots.</p>
           </article>
-          <article class="evidence-card">
-            <img src="static/images/neural-motion-planning.png" alt="7-DoF neural motion planning scene.">
-            <div>
-              <span>Neural motion planning</span>
-              <h3>Sampling-based data becomes more useful.</h3>
-              <p>Ambient improves success over co-training while avoiding much of the high-acceleration behavior inherited from lower-quality planners.</p>
-            </div>
+          <article>
+            <span class="card-index">02</span>
+            <strong>Messy data is partly right.</strong>
+            <p>A rollout may share the plan but have bad control, or share local skills while solving the wrong task.</p>
           </article>
-          <article class="evidence-card">
-            <img src="static/images/planar-results.png" alt="Planar pushing Ambient results chart.">
-            <div>
-              <span>Sim-to-real shift</span>
-              <h3>Per-sample labels matter.</h3>
-              <p>In planar pushing, classifier-labeled Ambient variants outperform co-training; per-datapoint t_min labels perform best.</p>
-            </div>
+          <article>
+            <span class="card-index">03</span>
+            <strong>Noise creates overlap.</strong>
+            <p>At high enough noise, target and imperfect actions can look the same. Low noise reveals local motion details.</p>
           </article>
-          <article class="evidence-card">
-            <img src="static/images/bin-metrics.png" alt="Block sorting logic, motion, and success metrics across sigma t max.">
-            <div>
-              <span>Task mismatch</span>
-              <h3>Learn grasping without learning the wrong task.</h3>
-              <p>Ambient uses wrong-task demonstrations at low noise to learn motion primitives while preserving target-task logic at high noise.</p>
-            </div>
+          <article>
+            <span class="card-index">04</span>
+            <strong>Ambient labels useful windows.</strong>
+            <p>A sweep or classifier marks the noise levels where each extra source matches the target behavior.</p>
+          </article>
+          <article>
+            <span class="card-index">05</span>
+            <strong>The sampler enforces them.</strong>
+            <p>Choose the noise level first. Target data is always valid; extra data is used only in its allowed window.</p>
           </article>
         </div>
       </div>
-    </section>
 
-    <section class="section-pad oxe-section" id="oxe">
-      <div class="container">
-        <div class="section-heading wide-heading">
-          <span class="section-number">06</span>
-          <h2>Scaling to Open X-Embodiment and hardware.</h2>
-          <p>OXE introduces unstructured mixtures: different embodiments, tasks, controllers, frequencies, teleoperation methods, and quality levels.</p>
-        </div>
-
-        <div class="oxe-grid">
-          <figure class="wide-media">
-            <img src="static/images/table-cleaning-task.png" alt="Table cleaning robot task sequence.">
-            <figcaption>Table cleaning requires opening the drawer, placing unseen objects inside, and closing the drawer.</figcaption>
-          </figure>
-          <div class="result-panel">
-            <h3>Table cleaning</h3>
-            <p>With 50 in-distribution demos, co-training adds only a small gain over filtering. Ambient improves by up to 15% and benefits from scaling OXE.</p>
-            <div class="mini-charts">
-              <img src="static/images/table-results-50.png" alt="Table cleaning results with 50 clean demos.">
-              <img src="static/images/table-results-150.png" alt="Table cleaning results with 150 clean demos.">
-            </div>
-          </div>
-          <div class="result-panel tower-panel">
-            <h3>Tower building</h3>
-            <p>The tower task stresses precision because placement errors compound. Ambient builds up to 33% taller towers than co-training.</p>
-            <img src="static/images/tower-building.jpg" alt="Kuka robot building a colored block tower.">
-          </div>
-          <figure class="wide-media">
-            <img src="static/images/oxe-results.png" alt="Open X-Embodiment scaling results for table cleaning and tower building.">
-            <figcaption>OXE scaling result summary for table cleaning and tower building.</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-pad video-section" id="videos">
-      <div class="container">
-        <div class="section-heading wide-heading">
-          <span class="section-number">07</span>
-          <h2>Real-world rollouts.</h2>
-          <p>Hardware videos are long by nature, so each card includes 1x, 2x, and 3x playback controls.</p>
-        </div>
-
-        <div class="video-grid">
-          <article class="video-card">
-            <div class="video-shell">
-              <video src="static/videos/table-cleaning-ambient.mp4" poster="static/images/poster-table-ambient.jpg" muted loop playsinline preload="metadata" aria-label="Ambient table cleaning success rollout"></video>
-              <div class="speed-controls" role="group" aria-label="Ambient table cleaning playback speed">
-                <button type="button" data-speed="1">1x</button>
-                <button type="button" data-speed="2">2x</button>
-                <button class="active" type="button" data-speed="3" aria-pressed="true">3x</button>
-              </div>
-            </div>
-            <h3>Ambient table cleaning</h3>
-            <p>Successful trial on unseen objects.</p>
-          </article>
-
-          <article class="video-card">
-            <div class="video-shell">
-              <video src="static/videos/table-cleaning-cotrain.mp4" poster="static/images/poster-table-cotrain.jpg" muted loop playsinline preload="metadata" aria-label="Co-trained table cleaning failure rollout"></video>
-              <div class="speed-controls" role="group" aria-label="Co-trained table cleaning playback speed">
-                <button type="button" data-speed="1">1x</button>
-                <button type="button" data-speed="2">2x</button>
-                <button class="active" type="button" data-speed="3" aria-pressed="true">3x</button>
-              </div>
-            </div>
-            <h3>Co-trained table cleaning</h3>
-            <p>Representative failure mode from using suboptimal data too broadly.</p>
-          </article>
-
-          <article class="video-card">
-            <div class="video-shell">
-              <video src="static/videos/tower-building-ambient.mp4" poster="static/images/poster-tower-ambient.jpg" muted loop playsinline preload="metadata" aria-label="Ambient tower building rollout"></video>
-              <div class="speed-controls" role="group" aria-label="Ambient tower building playback speed">
-                <button type="button" data-speed="1">1x</button>
-                <button type="button" data-speed="2">2x</button>
-                <button class="active" type="button" data-speed="3" aria-pressed="true">3x</button>
-              </div>
-            </div>
-            <h3>Ambient tower building</h3>
-            <p>Alternating color and direction blocks on hardware.</p>
-          </article>
-
-          <article class="video-card">
-            <div class="video-shell">
-              <video src="static/videos/tower-building-cotrain.mp4" poster="static/images/poster-tower-cotrain.jpg" muted loop playsinline preload="metadata" aria-label="Co-trained tower building rollout"></video>
-              <div class="speed-controls" role="group" aria-label="Co-trained tower building playback speed">
-                <button type="button" data-speed="1">1x</button>
-                <button type="button" data-speed="2">2x</button>
-                <button class="active" type="button" data-speed="3" aria-pressed="true">3x</button>
-              </div>
-            </div>
-            <h3>Co-trained tower building</h3>
-            <p>Baseline comparison under the same task family.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-pad appendix-section" id="appendix">
-      <div class="container">
-        <div class="section-heading wide-heading">
-          <span class="section-number">08</span>
-          <h2>Appendix results worth seeing.</h2>
-          <p>These details are too important to bury: they explain where Ambient is practical and where the open questions remain.</p>
-        </div>
-
-        <div class="appendix-grid">
-          <article class="appendix-item">
-            <img src="static/images/sampling-probs.png" alt="Dataset sampling probabilities over diffusion time.">
-            <div>
-              <h3>Dataset weights become noise-dependent.</h3>
-              <p>Co-training uses every dataset at every diffusion time. Ambient changes the admissible set over time, creating the characteristic middle region where only target data is used.</p>
-            </div>
-          </article>
-          <article class="appendix-item">
-            <img src="static/images/reweighting-ablation.png" alt="Reweighting ablation for table cleaning.">
-            <div>
-              <h3>Ambient is less fragile to reweighting.</h3>
-              <p>Because D_q is only used when it is aligned, Ambient is less sensitive to exact mixture weights than co-training.</p>
-            </div>
-          </article>
-          <article class="appendix-item">
-            <img src="static/images/finetuning.png" alt="Finetuning comparison plot.">
-            <div>
-              <h3>Finetuning is not a complete fix.</h3>
-              <p>Finetuning an Ambient base is stronger than finetuning a co-trained base, and an Ambient base can outperform a finetuned co-trained model when target data is scarce.</p>
-            </div>
-          </article>
-          <article class="appendix-item">
-            <img src="static/images/table-finetuning.png" alt="Table cleaning finetuning comparison.">
-            <div>
-              <h3>Hardware finetuning did not erase the gap.</h3>
-              <p>On table cleaning, finetuning the best policies did not produce a statistically significant improvement in the current experiments.</p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-pad abstract-section" id="abstract">
-      <div class="container narrow">
-        <div class="section-heading wide-heading">
-          <span class="section-number">09</span>
-          <h2>Abstract.</h2>
-        </div>
+      <div class="container narrow walkthrough-start">
+        <span class="section-kicker">Detailed walkthrough</span>
+        <h2 class="section-title">1. Start With Robot Data</h2>
+        <p class="lead">
+          The clean imitation-learning story starts with expert demonstrations from the exact robot, task, and environment you care about. In practice, that data is the expensive part. What you can collect or reuse is usually a patchwork: non-expert teleoperation, simulation, other tasks, other robots, and large mixed datasets such as Open X-Embodiment.
+        </p>
         <p>
-          We propose Ambient Diffusion Policy, a simple and principled method for imitation learning from suboptimal data in robotics.
-          High-quality, task-specific robot data is expensive and time-consuming to collect, while suboptimal datasets with lower-quality or out-of-distribution demonstrations are abundant.
-          Existing methods that co-train on both data sources in robotics often fail to separate the meaningful and the harmful features in suboptimal samples.
-          In contrast, our method attempts to extract only the useful learning signal by introducing a new axis to co-training in robotics: <em>noise-dependent data usage</em>.
-          Ambient Diffusion Policy restricts the contribution of suboptimal data during training to only the high and low diffusion times.
-          We observe that robot action data exhibits a spectral power law, which induces two important properties on the optimal Diffusion Policy: <em>locality</em> and a <em>global-to-local hierarchy</em>. These properties rigorously justify our algorithm.
-          Our experiments validate Ambient Diffusion Policy on four types of suboptimal action data (noisy trajectories, sim-to-real gap, task mismatch, and large-scale data mixtures) and six tasks.
-          The results show that it effectively learns from arbitrary sources of suboptimal data. Notably, it outperforms existing baselines by up to 33% when scaled to Open X-Embodiment—a large real-world dataset with unstructured and heterogeneous distribution shifts.
-          Overall, Ambient Diffusion Policy increases the utility of suboptimal demonstrations and expands the set of usable data sources in robotics.
+          The extra data is not all good or all bad. A non-expert rollout may take the right route with clumsy motion. A pick-and-place dataset may teach reliable grasps while encoding the wrong bin choice. Filtering is too blunt; co-training is too trusting. Ambient asks a narrower question: <strong>at which diffusion noise levels does this data match the target behavior?</strong>
+        </p>
+      </div>
+
+      <div class="container">
+        <figure class="wide-figure hierarchy-figure">
+          <picture>
+            <source srcset="static/images/robot-data-hierarchy.webp" type="image/webp">
+            <img src="static/images/robot-data-hierarchy.png" alt="Global-to-local hierarchy in action diffusion across maze and bin sorting examples." loading="lazy" decoding="async">
+          </picture>
+          <figcaption>
+            <strong>The spectral power law induces a global-to-local hierarchy in action diffusion.</strong>
+            Read the axis from right to left during denoising: high-noise denoisers recover low-frequency, coarse structure first; low-noise denoisers recover high-frequency, local details later.
+            <span><b>(a) Image diffusion analogy.</b> The image row is included because image diffusion and robot action diffusion share the same coarse-to-fine structure: high noise preserves only broad, low-frequency content, while low noise restores fine texture and edges.</span>
+            <span><b>(b) Maze actions.</b> At high noise, the policy commits to a high-level route through the maze. At lower noise, it refines that route into a collision-free and then smoother trajectory.</span>
+            <span><b>(c) Block-sorting actions.</b> At high noise, the policy resolves task-level choices such as which bin to use. At intermediate noise, it decides which block to grasp. At low noise, it refines the grasp and placement motion.</span>
+            <span>This is the reason Ambient can use imperfect data selectively: extra data can train the noise levels where it matches the target behavior, without forcing every denoiser to imitate every part of that data.</span>
+          </figcaption>
+        </figure>
+      </div>
+
+    </section>
+
+    <section class="section soft" id="method" data-section="method">
+      <div class="container narrow">
+        <h2 class="section-title">2. Use the Noise Level as a Filter</h2>
+        <p class="lead">
+          Ambient keeps Diffusion Policy mostly untouched. The policy still learns a denoiser for noisy action chunks. The key question is what the denoiser can still see at each noise level.
+        </p>
+      </div>
+
+      <div class="container">
+        <div class="noise-overlap">
+          <div>
+            <span class="card-index">High-noise intuition</span>
+            <h3>Enough noise can make suboptimal and target data look the same.</h3>
+            <p>
+              At low noise, a denoiser can see the exact mistakes: jagged motions, bad contacts, or clumsy teleoperation. After adding enough Gaussian noise, those low-level differences are hidden. What remains is the shared coarse behavior, such as the route through a maze or the object that should be manipulated.
+            </p>
+            <p>
+              Ambient uses this effect instead of fighting it. When noisy target actions and noisy extra actions overlap, the extra data is allowed to train those high-noise denoisers. When the mismatch is still visible, the sampler falls back to target data.
+            </p>
+          </div>
+          <div class="overlap-visual" aria-label="High noise makes target and suboptimal action distributions overlap.">
+            <div class="overlap-stage">
+              <span>Low noise</span>
+              <div class="dot-field separated" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i>
+                <b></b><b></b><b></b><b></b><b></b>
+              </div>
+              <p>Target and imperfect data are visibly different.</p>
+            </div>
+            <div class="overlap-arrow" aria-hidden="true">noise</div>
+            <div class="overlap-stage">
+              <span>High noise</span>
+              <div class="dot-field overlapped" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i>
+                <b></b><b></b><b></b><b></b><b></b>
+              </div>
+              <p>The differences blur; the shared plan remains trainable.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="method-grid">
+          <article>
+            <h3>High noise: keep the plan</h3>
+            <p>
+              Enough Gaussian noise washes out contact-level mistakes. If imperfect data shares the same coarse intent as target data, the noisy versions can overlap and teach high-level behavior.
+            </p>
+          </article>
+          <article>
+            <h3>Low noise: keep local skill</h3>
+            <p>
+              At low noise, robot denoisers are local in time. That lets Ambient reuse motions such as grasping or placing, even from data whose task-level goal is different.
+            </p>
+          </article>
+          <article>
+            <h3>In between: be conservative</h3>
+            <p>
+              Some noise levels still expose the wrong dynamics, wrong task logic, or poor control. Ambient leaves those denoisers to the target data.
+            </p>
+          </article>
+        </div>
+
+        <div class="method-transition">
+          Same policy. Same inference. More selective training batches.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sampler" data-section="sampler">
+      <div class="container narrow">
+        <h2 class="section-title">3. What You Actually Implement</h2>
+        <p class="lead">
+          The method has two short phases: label when non-target data is allowed, then make the data loader respect those labels. The trained policy is still a standard Diffusion Policy.
+        </p>
+      </div>
+
+      <div class="container">
+        <div class="method-grid">
+          <article>
+            <span class="card-index">Phase 1</span>
+            <h3>Label the extra data</h3>
+            <p>
+              Split demonstrations into target data <span class="math"><var>D</var><sub>p</sub></span> and extra data <span class="math"><var>D</var><sub>q</sub></span>. A hyperparameter sweep is often enough. The paper also gives a classifier option: train <span class="math"><var>c</var><sub>&phi;</sub>(<var>A</var><sub>t</sub>, <var>t</var>)</span> to tell whether a noisy action came from <span class="math"><var>D</var><sub>p</sub></span> or <span class="math"><var>D</var><sub>q</sub></span>.
+            </p>
+          </article>
+          <article>
+            <span class="card-index">Classifier</span>
+            <h3>Find where distributions blur together</h3>
+            <p>
+              <span class="math"><var>t</var><sub>min</sub></span> is the first noise level where noisy <span class="math"><var>D</var><sub>q</sub></span> actions look like noisy target actions. Practically, it is where the classifier can no longer separate the two.
+            </p>
+          </article>
+          <article>
+            <span class="card-index">Optional</span>
+            <h3>Mark local-transfer windows</h3>
+            <p>
+              <span class="math"><var>t</var><sub>max</sub></span> marks low-noise timesteps where local motion primitives transfer. It can be estimated with a similar classifier, or chosen with a task-specific sweep.
+            </p>
+          </article>
+        </div>
+
+        <div class="implementation-contrast" aria-label="Implementation summary">
+          <article>
+            <h3>Data-loader change</h3>
+            <ul>
+              <li>Store allowed timestep windows for each extra data source.</li>
+              <li>Sample the diffusion time <span class="math"><var>t</var></span> before choosing the data source.</li>
+              <li>Always allow target data <span class="math"><var>D</var><sub>p</sub></span>; allow extra data only when its window contains <span class="math"><var>t</var></span>.</li>
+            </ul>
+          </article>
+          <article>
+            <h3>Everything else stays standard</h3>
+            <ul>
+              <li>The Diffusion Policy architecture.</li>
+              <li>The usual denoising objective used in the experiments.</li>
+              <li>The deployment-time denoising process and runtime policy.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section soft" id="experiments" data-section="experiments">
+      <div class="container narrow">
+        <h2 class="section-title">4. Results</h2>
+        <p class="lead">
+          The paper first builds controlled cases where we know which part of the extra data should transfer. Then it tests the same sampler with Open X-Embodiment data on real Kuka tasks.
+        </p>
+      </div>
+
+      <div class="container">
+        <figure class="wide-figure compact task-figure">
+          <picture>
+            <source srcset="static/images/task-visualization.webp" type="image/webp">
+            <img src="static/images/task-visualization.png" alt="Overview of controlled experiments and hardware tasks." loading="lazy" decoding="async">
+          </picture>
+          <figcaption>Six tasks cover noisy trajectories, neural motion planning, sim-and-real co-training, task mismatch, cross-embodiment data, and OXE scaling.</figcaption>
+        </figure>
+
+        <div class="result-subhead">
+          <span>Controlled checks</span>
+          <p>Each task makes the partial match between target and extra data visible.</p>
+        </div>
+
+        <div class="results-grid controlled-results">
+          <article class="result-card">
+            <div>
+              <p class="result-label">Noisy trajectories</p>
+              <h3>Keep the routes, lose the jerkiness.</h3>
+              <p>In the 2D maze, RRT gives broad coverage but produces jagged paths. Ambient reaches 99.5% success and lowers the smoothness metric from 62.2 to 31.0, where lower is smoother.</p>
+            </div>
+            <img src="static/images/maze-rollout-compare.png" alt="Co-trained and Ambient maze rollouts." loading="lazy" decoding="async">
+          </article>
+
+          <article class="result-card">
+            <div>
+              <p class="result-label">Sim-to-real proxy</p>
+              <h3>Take the simulated strategy, not the sim2real gap.</h3>
+              <p>In planar pushing, per-datapoint <code>t_min</code> annotation reaches 93.5% success, compared with 84.5% for co-training.</p>
+            </div>
+            <img src="static/images/planar-results.png" alt="Planar pushing results comparing co-training and Ambient variants." loading="lazy" decoding="async">
+          </article>
+
+          <article class="result-card">
+            <div>
+              <p class="result-label">Task mismatch</p>
+              <h3>Borrow the grasp, not the wrong bin choice.</h3>
+              <p>In block sorting, opposite-task data has useful pick-and-place motion but the wrong task logic. Ambient reaches 93.3% success versus 22.7% for co-training.</p>
+            </div>
+            <img src="static/images/bin-metrics.png" alt="Block sorting metrics across Ambient thresholds." loading="lazy" decoding="async">
+          </article>
+        </div>
+
+        <div class="result-subhead scale-heading">
+          <span>Real hardware scaling</span>
+          <p>The OXE experiments test whether Ambient can use broader robot mixtures that are usually filtered away.</p>
+        </div>
+
+        <div class="results-grid scale-results">
+          <article class="result-card scale-card">
+            <div>
+              <p class="result-label">Open X-Embodiment scaling</p>
+              <h3>Custom OXE beats the curated Magic Soup++ mix.</h3>
+              <p>Magic Soup++ is the curated 27-dataset OXE mixture used by OpenVLA. Custom OXE keeps those datasets and adds 21 more. Co-training barely improves and plateaus as the mixture grows; Ambient improves when the extra datasets are added.</p>
+              <p>That is the scaling result: data that would normally be filtered can still help when it trains only the diffusion timesteps where it matches the target task. On real Kuka tasks, Ambient improves table cleaning by up to 15% and builds towers up to 33% taller than co-training.</p>
+            </div>
+            <img src="static/images/oxe-results.png" alt="Table cleaning and tower building results with Open X-Embodiment data." loading="eager" decoding="sync">
+          </article>
+        </div>
+
+        <div class="takeaway-panel">
+          <h3>Stop choosing between filtering and blanket co-training.</h3>
+          <p>
+            If extra robot data is partly useful, Ambient is the safer default: keep the data, but train from it only at the diffusion timesteps where it matches the target behavior. In these experiments, that tiny data-loader change consistently improves over throwing data away or co-training on the whole mixture.
+          </p>
+        </div>
+
+        <div class="faq-panel" aria-labelledby="faq-title">
+          <div class="faq-head">
+            <p class="eyebrow">Questions readers may have</p>
+            <h3 id="faq-title">What the ablations add</h3>
+          </div>
+
+          <div class="faq-grid">
+            <article class="faq-item">
+              <h4>Does the classifier have to be perfect?</h4>
+              <p>No. In the planar pushing ablations, performance was not very sensitive to the classifier checkpoint or threshold. The classifier mainly needs to be trained well enough to find where the noisy extra data starts to resemble the target data.</p>
+            </article>
+
+            <article class="faq-item">
+              <h4>When should extra data be used at low noise?</h4>
+              <p>Only when local motion transfers. Low-noise extra data helped in task mismatch and tower building, where grasping and placement skills were useful. It did not help for sim-to-real pushing, where contact details differ, or for table cleaning with more target demos.</p>
+            </article>
+
+            <article class="faq-item">
+              <h4>Does dataset weighting still matter?</h4>
+              <p>Less than in co-training. Ambient was at most 9% worse without the OXE re-weighting scheme, while unweighted co-trained policies were too unsafe to evaluate on hardware. Selecting data by timestep makes the mixture less fragile.</p>
+            </article>
+
+            <article class="faq-item">
+              <h4>Can fine-tuning replace Ambient training?</h4>
+              <p>Not in these experiments. Fine-tuning an Ambient base policy beats fine-tuning a co-trained base policy, and when target data is scarce, the Ambient base policy can already outperform the fine-tuned co-trained policy.</p>
+            </article>
+
+            <article class="faq-item">
+              <h4>What about observation shift?</h4>
+              <p>Ambient addresses action-space shift. The paper tried two observation-side additions on table cleaning: noising the observations during training and classifier-free guidance. Neither produced a stronger policy in that setting.</p>
+            </article>
+
+            <article class="faq-item">
+              <h4>Can Ambient hurt?</h4>
+              <p>The main cost is compute: Ambient trains on more data than filtering. It is also worth being conservative with low-noise extra data when local skills do not transfer. In the paper's experiments, the extra compute is usually worth it.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="rollouts" data-section="rollouts">
+      <div class="container narrow">
+        <h2 class="section-title">Example Hardware Rollouts</h2>
+        <p class="lead">
+          Here are some example real-world rollouts.
+        </p>
+      </div>
+
+      <div class="container video-grid">
+        <article class="video-card">
+          <video muted loop playsinline controls preload="metadata" poster="static/images/poster-table-ambient.jpg" aria-label="Table cleaning Ambient rollout video">
+            <source src="static/videos/table-cleaning-ambient.mp4" type="video/mp4">
+          </video>
+          <div class="video-caption">
+            <h3>Table cleaning: Ambient</h3>
+            <div class="speed-controls" role="group" aria-label="Table cleaning Ambient playback speed">
+              <button type="button" data-speed="1" aria-pressed="false">1x</button>
+              <button type="button" data-speed="3" aria-pressed="true" class="active">3x</button>
+              <button type="button" data-speed="5" aria-pressed="false">5x</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="video-card">
+          <video muted loop playsinline controls preload="metadata" poster="static/images/poster-table-cotrain.jpg" aria-label="Table cleaning co-training rollout video">
+            <source src="static/videos/table-cleaning-cotrain.mp4" type="video/mp4">
+          </video>
+          <div class="video-caption">
+            <h3>Table cleaning: co-training</h3>
+            <div class="speed-controls" role="group" aria-label="Table cleaning co-training playback speed">
+              <button type="button" data-speed="1" aria-pressed="false">1x</button>
+              <button type="button" data-speed="3" aria-pressed="true" class="active">3x</button>
+              <button type="button" data-speed="5" aria-pressed="false">5x</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="video-card">
+          <video muted loop playsinline controls preload="metadata" poster="static/images/poster-tower-ambient.jpg" aria-label="Tower building Ambient rollout video">
+            <source src="static/videos/tower-building-ambient.mp4" type="video/mp4">
+          </video>
+          <div class="video-caption">
+            <h3>Tower building: Ambient</h3>
+            <div class="speed-controls" role="group" aria-label="Tower building Ambient playback speed">
+              <button type="button" data-speed="1" aria-pressed="false">1x</button>
+              <button type="button" data-speed="3" aria-pressed="true" class="active">3x</button>
+              <button type="button" data-speed="5" aria-pressed="false">5x</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="video-card">
+          <video muted loop playsinline controls preload="metadata" poster="static/images/poster-tower-cotrain.jpg" aria-label="Tower building co-training rollout video">
+            <source src="static/videos/tower-building-cotrain.mp4" type="video/mp4">
+          </video>
+          <div class="video-caption">
+            <h3>Tower building: co-training</h3>
+            <div class="speed-controls" role="group" aria-label="Tower building co-training playback speed">
+              <button type="button" data-speed="1" aria-pressed="false">1x</button>
+              <button type="button" data-speed="3" aria-pressed="true" class="active">3x</button>
+              <button type="button" data-speed="5" aria-pressed="false">5x</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section soft" id="abstract" data-section="abstract">
+      <div class="container narrow">
+        <h2 class="section-title">Abstract</h2>
+        <p>
+          We propose Ambient Diffusion Policy, a simple and principled method for imitation learning from suboptimal data in robotics. High-quality, task-specific robot data is expensive and time-consuming to collect, while suboptimal datasets with lower-quality or out-of-distribution demonstrations are abundant. Existing methods that co-train on both data sources in robotics often fail to separate the meaningful and the harmful features in suboptimal samples. In contrast, our method attempts to extract only the useful learning signal by introducing a new axis to co-training in robotics: <em>noise-dependent data usage</em>.
+        </p>
+        <p>
+          Ambient Diffusion Policy restricts the contribution of suboptimal data during training to only the high and low diffusion times. We observe that robot action data exhibits a spectral power law, which induces two important properties on the optimal Diffusion Policy: <em>locality</em> and a <em>global-to-local hierarchy</em>. These properties rigorously justify our algorithm.
+        </p>
+        <p>
+          Our experiments validate Ambient Diffusion Policy on four types of suboptimal action data (noisy trajectories, sim-to-real gap, task mismatch, and large-scale data mixtures) and six tasks. The results show that it effectively learns from arbitrary sources of suboptimal data. Notably, it outperforms existing baselines by up to 33% when scaled to Open X-Embodiment&mdash;a large real-world dataset with unstructured and heterogeneous distribution shifts. Overall, Ambient Diffusion Policy increases the utility of suboptimal demonstrations and expands the set of usable data sources in robotics.
         </p>
       </div>
     </section>
 
+    <section class="section">
+      <div class="container narrow">
+        <h2 class="section-title">Citation</h2>
+        <pre class="bibtex" id="bibtex"><code>@misc{wei2026ambientdiffusionpolicy,
+  title = {Ambient Diffusion Policy: Imitation Learning from Suboptimal Data in Robotics},
+  author = {Adam Wei and Giannis Daras and Nicholas Pfaff and Thomas Cohn and Arif Kerem Dayi and Constantinos Daskalakis and Russ Tedrake},
+  year = {2026},
+  note = {arXiv preprint}
+}</code></pre>
+      </div>
+    </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
+  <footer class="footer">
+    <div class="container">
       <p>Ambient Diffusion Policy</p>
-      <p>Imitation learning from suboptimal robot data.</p>
     </div>
   </footer>
 
-  <script src="static/js/site.js"></script>
+  <script src="static/js/site.js?v=anchor1"></script>
 </body>
 </html>
