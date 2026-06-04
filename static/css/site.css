@@ -425,6 +425,7 @@ h1 {
   color: #303943;
   font-size: 1.1rem;
   line-height: 1.62;
+  text-align: center;
 }
 
 .narrow p:not(.lead) {
