@@ -203,22 +203,6 @@ h1 {
   color: var(--blue);
 }
 
-.authors sup {
-  margin-left: 2px;
-  margin-right: -2px;
-  color: var(--blue-dark);
-  font-size: 0.68em;
-  font-weight: 760;
-  line-height: 0;
-}
-
-.author-notes {
-  margin: 6px 0 0;
-  color: var(--muted);
-  font-size: 0.86rem;
-  line-height: 1.35;
-}
-
 .link-row {
   display: flex;
   flex-wrap: wrap;
