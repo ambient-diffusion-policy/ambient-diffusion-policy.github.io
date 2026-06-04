@@ -188,6 +188,19 @@
     const closeButton = lightbox.querySelector(".figure-lightbox-close");
     let activeTrigger = null;
 
+    const escapeHtml = (value) =>
+      value.replace(
+        /[&<>"']/g,
+        (char) =>
+          ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+          })[char]
+      );
+
     const figureCaptionFor = (image) => {
       if (image.dataset.fullCaption) {
         return image.dataset.fullCaption.trim();
@@ -197,7 +210,9 @@
       const figcaption = figure ? figure.querySelector("figcaption") : null;
       const card = image.closest(".result-card");
       const cardTitle = card ? card.querySelector("h3") : null;
-      return (figcaption && figcaption.textContent.trim()) || (cardTitle && cardTitle.textContent.trim()) || image.alt || "";
+      if (figcaption) return figcaption.innerHTML.trim();
+      if (cardTitle) return escapeHtml(cardTitle.textContent.trim());
+      return escapeHtml(image.alt || "");
     };
 
     const closeLightbox = () => {
@@ -206,7 +221,7 @@
       document.body.classList.remove("lightbox-open");
       lightboxImage.removeAttribute("src");
       lightboxImage.alt = "";
-      lightboxCaption.textContent = "";
+      lightboxCaption.replaceChildren();
 
       if (activeTrigger) {
         activeTrigger.focus({ preventScroll: true });
@@ -220,9 +235,10 @@
       lightboxImage.src = image.currentSrc || image.src;
       lightboxImage.alt = image.alt || "";
       lightboxImage.classList.toggle("is-wide", aspectRatio > 1.5);
-      lightboxCaption.textContent = figureCaptionFor(image);
-      lightboxCaption.hidden = lightboxCaption.textContent.length === 0;
-      lightbox.classList.toggle("has-long-caption", lightboxCaption.textContent.length > 520);
+      lightboxCaption.innerHTML = figureCaptionFor(image);
+      const captionText = lightboxCaption.textContent.trim();
+      lightboxCaption.hidden = captionText.length === 0;
+      lightbox.classList.toggle("has-long-caption", captionText.length > 520);
       lightbox.hidden = false;
       document.body.classList.add("lightbox-open");
       closeButton.focus({ preventScroll: true });
