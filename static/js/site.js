@@ -189,6 +189,10 @@
     let activeTrigger = null;
 
     const figureCaptionFor = (image) => {
+      if (image.dataset.fullCaption) {
+        return image.dataset.fullCaption.trim();
+      }
+
       const figure = image.closest("figure");
       const figcaption = figure ? figure.querySelector("figcaption") : null;
       const card = image.closest(".result-card");

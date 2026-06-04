@@ -320,7 +320,7 @@
               <h3>Borrow the grasp, not the wrong bin choice.</h3>
               <p>In block sorting, opposite-task data has useful pick-and-place motion but the wrong task logic. Ambient reaches 93.3% success versus 22.7% for co-training.</p>
             </div>
-            <img src="static/images/bin-metrics.png" alt="Block sorting metrics across Ambient thresholds." loading="lazy" decoding="async">
+            <img src="static/images/bin-metrics.png" alt="Block sorting metrics across Ambient thresholds." loading="lazy" decoding="async" data-full-caption="Performance metrics vs &sigma;_tmax. The logic metric plateaus before &sigma;_tmax*=0.46 and deteriorates rapidly afterwards; the opposite is true for the motion metric. Thus, the policy learns local motion-level features for t in [0, t_max*) and global logic-level features for t in (t_max*, T]. This is why Ambient can borrow pick-and-place motion from opposite-task data without learning the wrong bin choice.">
           </article>
         </div>
 
@@ -490,6 +490,6 @@
     </div>
   </footer>
 
-  <script src="static/js/site.js?v=anchor1"></script>
+  <script src="static/js/site.js?v=caption2"></script>
 </body>
 </html>
