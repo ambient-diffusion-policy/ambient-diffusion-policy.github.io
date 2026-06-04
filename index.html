@@ -293,15 +293,15 @@
 
         <div class="result-subhead">
           <span>Controlled checks</span>
-          <p>Each task makes the partial match between target and extra data visible.</p>
+          <p>Each setup isolates one way extra robot data is partly useful and partly wrong.</p>
         </div>
 
         <div class="results-grid controlled-results">
           <article class="result-card">
             <div>
               <p class="result-label">Noisy trajectories</p>
-              <h3>Keep the routes, lose the jerkiness.</h3>
-              <p>In the 2D maze, RRT gives broad coverage but produces jagged paths. Ambient reaches 99.5% success and lowers the smoothness metric from 62.2 to 31.0, where lower is smoother.</p>
+              <h3>Keep the cheap routes, lose the jitter.</h3>
+              <p><strong>Target:</strong> 50 expensive, smooth trajectory-optimization paths. <strong>Extra:</strong> 5,000 cheap RRT paths that cover the maze but are jagged. <strong>Result:</strong> Ambient uses the routes without learning the jitter: 99.5% success with smoothness 31.0 vs 62.2 for co-training.</p>
             </div>
             <img src="static/images/maze-rollout-compare.png" alt="Co-trained and Ambient maze rollouts." loading="lazy" decoding="async">
           </article>
@@ -310,7 +310,7 @@
             <div>
               <p class="result-label">Sim-to-real proxy</p>
               <h3>Take the simulated strategy, not the sim2real gap.</h3>
-              <p>In planar pushing, per-datapoint <code>t_min</code> annotation reaches 93.5% success, compared with 84.5% for co-training.</p>
+              <p><strong>Target:</strong> 50 teleoperated pushes in the target environment. <strong>Extra:</strong> 2,000 planner trajectories from a source simulation: the high-level push transfers, but the contacts do not. <strong>Result:</strong> per-datapoint <span class="math"><var>t</var><sub>min</sub></span> reaches 93.5% success vs 84.5% for co-training.</p>
             </div>
             <img src="static/images/planar-results.png" alt="Planar pushing results comparing co-training and Ambient variants." loading="lazy" decoding="async">
           </article>
@@ -319,7 +319,7 @@
             <div>
               <p class="result-label">Task mismatch</p>
               <h3>Borrow the grasp, not the wrong bin choice.</h3>
-              <p>In block sorting, opposite-task data has useful pick-and-place motion but the wrong task logic. Ambient reaches 93.3% success versus 22.7% for co-training.</p>
+              <p><strong>Target:</strong> 50 demonstrations of the correct color-to-bin rule. <strong>Extra:</strong> 200 demonstrations of the opposite rule, so the grasps transfer but the logic is wrong. <strong>Result:</strong> Ambient uses it only for local motion: 93.3% success vs 22.7% for co-training.</p>
             </div>
             <img src="static/images/bin-metrics.png" alt="Block sorting metrics across Ambient thresholds." loading="lazy" decoding="async" data-full-caption="Performance metrics vs &sigma;_tmax. The logic metric plateaus before &sigma;_tmax*=0.46 and deteriorates rapidly afterwards; the opposite is true for the motion metric. Thus, the policy learns local motion-level features for t in [0, t_max*) and global logic-level features for t in (t_max*, T]. This is why Ambient can borrow pick-and-place motion from opposite-task data without learning the wrong bin choice.">
           </article>
