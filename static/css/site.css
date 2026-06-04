@@ -931,24 +931,25 @@ h1 {
 }
 
 .scale-card {
-  display: grid;
-  grid-template-columns: minmax(260px, 0.55fr) minmax(0, 1fr);
-  align-items: stretch;
+  display: block;
 }
 
-.scale-card > div {
+.scale-copy {
   display: grid;
-  align-content: center;
+  grid-template-columns: minmax(240px, 0.42fr) minmax(0, 1fr);
+  gap: 18px 28px;
+  align-items: start;
 }
 
 .scale-card img {
-  height: 100%;
-  min-height: 300px;
-  padding: 22px;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 18px 24px 22px;
   box-sizing: border-box;
   object-fit: contain;
-  border-top: 0;
-  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  border-left: 0;
 }
 
 .expandable-figure {
@@ -1218,6 +1219,7 @@ body.lightbox-open {
   .video-grid,
   .implementation-contrast,
   .controlled-results,
+  .scale-copy,
   .scale-card {
     grid-template-columns: 1fr;
   }

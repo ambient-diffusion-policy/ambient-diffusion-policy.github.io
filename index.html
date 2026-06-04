@@ -332,11 +332,15 @@
 
         <div class="results-grid scale-results">
           <article class="result-card scale-card">
-            <div>
-              <p class="result-label">Open X-Embodiment scaling</p>
-              <h3>Using more OXE beats filtering to the curated mix.</h3>
-              <p>Magic Soup++ is the curated 27-dataset OXE mixture used by OpenVLA. Custom OXE is not more selective; it is our broad usable OXE subset for this setup: Magic Soup++ plus 21 more compatible datasets. The OXE datasets left out were mostly inaccessible, bimanual, missing frequency metadata, or blocked by unresolved loader issues. Co-training plateaus as the mixture grows; Ambient improves when the extra OXE data is added.</p>
-              <p>That is the scaling result: data that would normally be filtered can still help when it trains only the diffusion timesteps where it matches the target task. On real Kuka tasks, Ambient improves table cleaning by up to 15% and builds towers up to 33% taller than co-training.</p>
+            <div class="scale-copy">
+              <div class="scale-copy-head">
+                <p class="result-label">Open X-Embodiment scaling</p>
+                <h3>Using more OXE beats filtering to the curated mix.</h3>
+              </div>
+              <div class="scale-copy-body">
+                <p>Magic Soup++ is the curated 27-dataset OXE mixture used by OpenVLA. Custom OXE is broader, not more selective: it keeps that mix and adds 21 compatible datasets. Datasets left out were mostly inaccessible, bimanual, missing frequency labels, or blocked by loader issues.</p>
+                <p>Data normally filtered away can still help when it trains only the timesteps where it matches the target task. Co-training plateaus as the mixture grows; Ambient improves with the extra OXE data, improving table cleaning by up to 15% and towers by up to 33% over co-training.</p>
+              </div>
             </div>
             <img src="static/images/oxe-results.png" alt="Table cleaning and tower building results with Open X-Embodiment data." loading="eager" decoding="sync">
           </article>
