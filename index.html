@@ -11,7 +11,7 @@
   <meta property="og:image" content="static/images/poster-teaser.jpg">
   <title>Ambient Diffusion Policy</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="static/css/site.css?v=anchor2">
+  <link rel="stylesheet" href="static/css/site.css?v=caption1">
 </head>
 <body>
   <header class="topbar">
@@ -123,18 +123,20 @@
 
       <div class="container">
         <figure class="wide-figure hierarchy-figure">
+          <figcaption>
+            <strong>The spectral power law induces a global-to-local hierarchy in action diffusion.</strong>
+            <p>Read the columns from right to left during denoising: high-noise denoisers recover coarse, low-frequency structure first; low-noise denoisers recover local details later.</p>
+            <ul>
+              <li><b>(a) Image diffusion analogy.</b> Image and action denoising share the same coarse-to-fine structure: high noise preserves broad content, while low noise restores fine details.</li>
+              <li><b>(b) Maze actions.</b> At high noise, the policy settles on a route; at lower noise, it refines that route into a collision-free and smooth trajectory.</li>
+              <li><b>(c) Block-sorting actions.</b> At high noise, the policy resolves task-level choices such as which bin to use; at low noise, it refines grasp and placement motion.</li>
+            </ul>
+            <p>This hierarchy is why Ambient can use imperfect data selectively: each extra source trains only the noise levels where it matches the target behavior.</p>
+          </figcaption>
           <picture>
             <source srcset="static/images/robot-data-hierarchy.webp" type="image/webp">
             <img src="static/images/robot-data-hierarchy.png" alt="Global-to-local hierarchy in action diffusion across maze and bin sorting examples." loading="lazy" decoding="async">
           </picture>
-          <figcaption>
-            <strong>The spectral power law induces a global-to-local hierarchy in action diffusion.</strong>
-            Read the axis from right to left during denoising: high-noise denoisers recover low-frequency, coarse structure first; low-noise denoisers recover high-frequency, local details later.
-            <span><b>(a) Image diffusion analogy.</b> The image row is included because image diffusion and robot action diffusion share the same coarse-to-fine structure: high noise preserves only broad, low-frequency content, while low noise restores fine texture and edges.</span>
-            <span><b>(b) Maze actions.</b> At high noise, the policy commits to a high-level route through the maze. At lower noise, it refines that route into a collision-free and then smoother trajectory.</span>
-            <span><b>(c) Block-sorting actions.</b> At high noise, the policy resolves task-level choices such as which bin to use. At intermediate noise, it decides which block to grasp. At low noise, it refines the grasp and placement motion.</span>
-            <span>This is the reason Ambient can use imperfect data selectively: extra data can train the noise levels where it matches the target behavior, without forcing every denoiser to imitate every part of that data.</span>
-          </figcaption>
         </figure>
       </div>
 
@@ -322,8 +324,8 @@
           <article class="result-card scale-card">
             <div>
               <p class="result-label">Open X-Embodiment scaling</p>
-              <h3>Custom OXE beats the curated Magic Soup++ mix.</h3>
-              <p>Magic Soup++ is the curated 27-dataset OXE mixture used by OpenVLA. Custom OXE keeps those datasets and adds 21 more. Co-training barely improves and plateaus as the mixture grows; Ambient improves when the extra datasets are added.</p>
+              <h3>More OXE data helps when it is used selectively.</h3>
+              <p>Magic Soup++ is the curated 27-dataset OXE mixture used by OpenVLA. Custom OXE is larger, not more selective: it keeps those datasets and adds 21 more. Co-training barely improves and plateaus as the mixture grows; Ambient improves when the extra datasets are added.</p>
               <p>That is the scaling result: data that would normally be filtered can still help when it trains only the diffusion timesteps where it matches the target task. On real Kuka tasks, Ambient improves table cleaning by up to 15% and builds towers up to 33% taller than co-training.</p>
             </div>
             <img src="static/images/oxe-results.png" alt="Table cleaning and tower building results with Open X-Embodiment data." loading="eager" decoding="sync">
