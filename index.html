@@ -11,7 +11,7 @@
   <meta property="og:image" content="static/images/poster-teaser.jpg">
   <title>Ambient Diffusion Policy</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="static/css/site.css?v=caption1">
+  <link rel="stylesheet" href="static/css/site.css?v=methodfig3">
 </head>
 <body>
   <header class="topbar">
@@ -154,12 +154,12 @@
         <div class="noise-overlap">
           <div>
             <span class="card-index">High-noise intuition</span>
-            <h3>Enough noise can make suboptimal and target data look the same.</h3>
+            <h3>High noise can make suboptimal and target data look the same.</h3>
             <p>
               At low noise, a denoiser can see the exact mistakes: jagged motions, bad contacts, or clumsy teleoperation. After adding enough Gaussian noise, those low-level differences are hidden. What remains is the shared coarse behavior, such as the route through a maze or the object that should be manipulated.
             </p>
             <p>
-              Ambient uses this effect instead of fighting it. When noisy target actions and noisy extra actions overlap, the extra data is allowed to train those high-noise denoisers. When the mismatch is still visible, the sampler falls back to target data.
+              That explains the high-noise window. If target and extra actions overlap after noising, extra data can train those denoisers. The low-noise window below is a separate case: it relies on locality, not full-distribution overlap.
             </p>
           </div>
           <div class="overlap-visual" aria-label="High noise makes target and suboptimal action distributions overlap.">
@@ -169,7 +169,7 @@
                 <i></i><i></i><i></i><i></i><i></i>
                 <b></b><b></b><b></b><b></b><b></b>
               </div>
-              <p>Target and imperfect data are visibly different.</p>
+              <p>The full target and extra distributions are visibly different.</p>
             </div>
             <div class="overlap-arrow" aria-hidden="true">noise</div>
             <div class="overlap-stage">
@@ -185,15 +185,15 @@
 
         <div class="method-grid">
           <article>
-            <h3>High noise: keep the plan</h3>
+            <h3>High noise: contraction</h3>
             <p>
               Enough Gaussian noise washes out contact-level mistakes. If imperfect data shares the same coarse intent as target data, the noisy versions can overlap and teach high-level behavior.
             </p>
           </article>
           <article>
-            <h3>Low noise: keep local skill</h3>
+            <h3>Low noise: locality</h3>
             <p>
-              At low noise, robot denoisers are local in time. That lets Ambient reuse motions such as grasping or placing, even from data whose task-level goal is different.
+              Low noise is not about the full datasets looking the same. It is where robot denoisers act locally, so Ambient can reuse transferable motions such as grasping or placing even when the broader task is different.
             </p>
           </article>
           <article>
@@ -203,6 +203,15 @@
             </p>
           </article>
         </div>
+
+        <figure class="wide-figure method-overview-figure">
+          <div class="method-overview-scroll">
+            <img src="static/images/method-overview.webp" alt="Ambient data usage rule across diffusion time: target data is always used, while extra data is used at low-noise locality windows and high-noise contraction windows." loading="lazy" decoding="async">
+          </div>
+          <figcaption>
+            Training rule for Ambient. High-quality target data <span class="math"><var>D</var><sub>p</sub></span> is used at every diffusion time. Extra data <span class="math"><var>D</var><sub>q</sub></span> appears at both ends for different reasons: locality at low noise, where transferable local motions can help despite a broader mismatch, and contraction at high noise, where noise hides differences so shared intent can train. The middle is left to target data.
+          </figcaption>
+        </figure>
 
         <div class="method-transition">
           Same policy. Same inference. More selective training batches.
