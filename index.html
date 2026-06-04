@@ -362,7 +362,7 @@
 
             <article class="faq-item">
               <h4>When should low-noise extra data help?</h4>
-              <p>When the local motion is transferable. It helped for task mismatch and tower building, where grasping and placement skills still mattered. It did not help when low-level contacts changed, as in sim-to-real pushing.</p>
+              <p>When the local motion is transferable. It clearly helped in task mismatch, where pick-and-place motion transferred but task logic did not. It also appears to help in tower building. It did not help when low-level contacts changed, as in sim-to-real pushing.</p>
             </article>
 
             <article class="faq-item">
@@ -372,7 +372,7 @@
 
             <article class="faq-item">
               <h4>Why not just fine-tune after co-training?</h4>
-              <p>Fine-tuning helps, but it did not replace Ambient. Fine-tuning an Ambient base policy beat fine-tuning a co-trained base policy, and with scarce target data, the Ambient base could already beat the fine-tuned co-trained one.</p>
+              <p>Fine-tuning did not close the gap. Fine-tuning an Ambient base policy beat fine-tuning a co-trained base policy, and with scarce target data, the Ambient base could already beat the fine-tuned co-trained one. On OXE table cleaning, fine-tuning did not produce a statistically significant gain.</p>
             </article>
 
             <article class="faq-item">
@@ -382,7 +382,7 @@
 
             <article class="faq-item">
               <h4>Is there a downside?</h4>
-              <p>The main cost is training compute. Ambient costs about the same as ordinary co-training, but more than data filtering because it trains on the extra data instead of throwing it away. In our experiments, the extra cost was usually worth it.</p>
+              <p>The main cost is training compute. Ambient is comparable to ordinary co-training because both keep the extra data, but it is more expensive than data filtering because filtering throws that data away. In our experiments, the extra cost was usually worth it.</p>
             </article>
           </div>
         </div>
