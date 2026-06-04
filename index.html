@@ -11,7 +11,7 @@
   <meta property="og:image" content="static/images/poster-teaser.jpg">
   <title>Ambient Diffusion Policy</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="static/css/site.css?v=methodfig3">
+  <link rel="stylesheet" href="static/css/site.css?v=qa1">
 </head>
 <body>
   <header class="topbar">
@@ -350,39 +350,39 @@
 
         <div class="faq-panel" aria-labelledby="faq-title">
           <div class="faq-head">
-            <p class="eyebrow">Questions readers may have</p>
-            <h3 id="faq-title">What the ablations add</h3>
+            <p class="eyebrow">Common questions</p>
+            <h3 id="faq-title">Questions &amp; Answers</h3>
           </div>
 
           <div class="faq-grid">
             <article class="faq-item">
-              <h4>Does the classifier have to be perfect?</h4>
-              <p>No. In the planar pushing ablations, performance was not very sensitive to the classifier checkpoint or threshold. The classifier mainly needs to be trained well enough to find where the noisy extra data starts to resemble the target data.</p>
+              <h4>Does the classifier need to be perfect?</h4>
+              <p>No. In planar pushing, performance was not very sensitive to the classifier checkpoint or threshold. The classifier just needs to be good enough to find the noise levels where extra data starts to look like target data.</p>
             </article>
 
             <article class="faq-item">
-              <h4>When should extra data be used at low noise?</h4>
-              <p>Only when local motion transfers. Low-noise extra data helped in task mismatch and tower building, where grasping and placement skills were useful. It did not help for sim-to-real pushing, where contact details differ, or for table cleaning with more target demos.</p>
+              <h4>When should low-noise extra data help?</h4>
+              <p>When the local motion is transferable. It helped for task mismatch and tower building, where grasping and placement skills still mattered. It did not help when low-level contacts changed, as in sim-to-real pushing.</p>
             </article>
 
             <article class="faq-item">
-              <h4>Does dataset weighting still matter?</h4>
-              <p>Less than in co-training. Ambient was at most 9% worse without the OXE re-weighting scheme, while unweighted co-trained policies were too unsafe to evaluate on hardware. Selecting data by timestep makes the mixture less fragile.</p>
+              <h4>Do I still need careful dataset weights?</h4>
+              <p>Less than with co-training. Ambient was at most 9% worse without the OXE re-weighting scheme, while unweighted co-trained policies were too unsafe to run on hardware. Timestep selection makes the mixture less brittle.</p>
             </article>
 
             <article class="faq-item">
-              <h4>Can fine-tuning replace Ambient training?</h4>
-              <p>Not in these experiments. Fine-tuning an Ambient base policy beats fine-tuning a co-trained base policy, and when target data is scarce, the Ambient base policy can already outperform the fine-tuned co-trained policy.</p>
+              <h4>Why not just fine-tune after co-training?</h4>
+              <p>Fine-tuning helps, but it did not replace Ambient. Fine-tuning an Ambient base policy beat fine-tuning a co-trained base policy, and with scarce target data, the Ambient base could already beat the fine-tuned co-trained one.</p>
             </article>
 
             <article class="faq-item">
-              <h4>What about observation shift?</h4>
-              <p>Ambient addresses action-space shift. The paper tried two observation-side additions on table cleaning: noising the observations during training and classifier-free guidance. Neither produced a stronger policy in that setting.</p>
+              <h4>Does this solve observation shift too?</h4>
+              <p>Not directly. Ambient is aimed at action-space shift. The paper also tried noising observations and classifier-free guidance on table cleaning, but those additions did not improve the policy in that setting.</p>
             </article>
 
             <article class="faq-item">
-              <h4>Can Ambient hurt?</h4>
-              <p>The main cost is compute: Ambient trains on more data than filtering. It is also worth being conservative with low-noise extra data when local skills do not transfer. In the paper's experiments, the extra compute is usually worth it.</p>
+              <h4>Is there a downside?</h4>
+              <p>The main cost is training compute. Ambient costs about the same as ordinary co-training, but more than data filtering because it trains on the extra data instead of throwing it away. In our experiments, the extra cost was usually worth it.</p>
             </article>
           </div>
         </div>
