@@ -11,7 +11,7 @@
   <meta property="og:image" content="static/images/poster-teaser.jpg">
   <title>Ambient Diffusion Policy</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="static/css/site.css?v=oxe-highlight1">
+  <link rel="stylesheet" href="static/css/site.css?v=takeaway1">
 </head>
 <body>
   <header class="topbar">
@@ -302,10 +302,14 @@
         </div>
 
         <div class="takeaway-panel">
-          <h3>Stop choosing between filtering and blanket co-training.</h3>
-          <p>
-            Filtering throws away useful signal. Plain co-training copies too much. Ambient is the middle option: keep the suboptimal robot data, but train from it only where the diffusion noise makes it compatible with the target. In these experiments, that sampler change beats both baselines.
-          </p>
+          <h3>Key Takeaway: Stop choosing between filtering and blanket co-training.</h3>
+          <p>Suboptimal robot data is rarely all good or all bad. Ambient uses the useful part without copying the wrong part: each source trains only at diffusion noise levels where it matches the target behavior.</p>
+          <ul>
+            <li><strong>Filtering</strong> throws away data that may still contain useful motions, strategies, or priors.</li>
+            <li><strong>Plain co-training</strong> uses every source at every noise level, so the policy can learn both the useful signal and the failures.</li>
+            <li><strong>Ambient</strong> changes the data loader so suboptimal sources appear only in compatible noise windows, keeping useful signal while blocking failures.</li>
+          </ul>
+          <p>That is why the same sampler change beats both baselines across the controlled tasks and the OXE hardware experiments.</p>
         </div>
 
       </div>
