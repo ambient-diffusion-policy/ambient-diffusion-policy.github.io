@@ -851,6 +851,17 @@ h1 {
   align-items: start;
 }
 
+.scale-keyline {
+  margin-top: 0;
+  padding: 12px 14px;
+  border: 1px solid #bdd5ef;
+  border-radius: 7px;
+  background: #f2f8ff;
+  color: var(--blue-dark);
+  font-weight: 720;
+  line-height: 1.45;
+}
+
 .scale-card img {
   width: 100%;
   height: auto;

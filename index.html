@@ -11,7 +11,7 @@
   <meta property="og:image" content="static/images/poster-teaser.jpg">
   <title>Ambient Diffusion Policy</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="static/css/site.css?v=hero-tldr1">
+  <link rel="stylesheet" href="static/css/site.css?v=oxe-highlight1">
 </head>
 <body>
   <header class="topbar">
@@ -289,11 +289,12 @@
             <div class="scale-copy">
               <div class="scale-copy-head">
                 <p class="result-label">Open X-Embodiment scaling</p>
-                <h3>Ambient turns broader OXE data into better hardware performance.</h3>
+                <h3>Broader OXE data helps under Ambient, not plain co-training.</h3>
               </div>
               <div class="scale-copy-body">
+                <p class="scale-keyline">On Kuka hardware, Ambient improves table cleaning by up to 15% and builds towers up to 33% taller than co-training.</p>
                 <p>Magic Soup++ is the curated 27-dataset OXE mix used by OpenVLA. Our Custom OXE keeps that mix and adds 21 compatible datasets; it is broader, not more filtered. We leave out datasets that were unavailable, bimanual, missing frequency labels, or blocked by loader issues.</p>
-                <p>Co-training plateaus as more OXE data is added. Ambient improves because suboptimal datasets train only the timesteps where they match the target task. On Kuka hardware, it improves table cleaning by up to 15% and builds towers up to 33% taller than co-training.</p>
+                <p>Plain co-training plateaus as more OXE data is added. Ambient improves because suboptimal datasets train only the timesteps where they match the target task.</p>
               </div>
             </div>
             <img src="static/images/oxe-results.png" alt="Table cleaning and tower building results with Open X-Embodiment data." loading="eager" decoding="sync">
