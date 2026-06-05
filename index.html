@@ -273,7 +273,7 @@
             <div>
               <p class="result-label">Task mismatch</p>
               <h3>Use the grasp, ignore the wrong rule.</h3>
-              <p>The target set is 50 demos with the correct color-to-bin rule. The suboptimal set is 200 demos with the opposite rule. The pick-and-place motion transfers; the task logic does not. Ambient uses it only for local motion: 93.3% success vs 22.7% for co-training.</p>
+              <p>The target demos sort each colored block into the correct bin. The suboptimal demos use the same pick-and-place motions, but send colors to the opposite bins. Ambient borrows the grasping and placing motion without learning the wrong sorting rule: 93.3% success vs 22.7% for co-training.</p>
             </div>
             <img src="static/images/bin-metrics.png" alt="Block sorting metrics across Ambient thresholds." loading="lazy" decoding="async" data-full-caption="Block sorting threshold sweep. Logic stays high until &sigma;_tmax*=0.46, then falls quickly; motion improves in the opposite direction. This shows that low-noise denoisers learn local motion while high-noise denoisers learn task logic, which is why Ambient can use opposite-task data for pick-and-place motion without copying the wrong bin choice.">
           </article>
