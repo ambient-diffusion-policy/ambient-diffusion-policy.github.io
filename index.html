@@ -74,10 +74,7 @@
         <span class="section-kicker">Detailed walkthrough</span>
         <h2 class="section-title">1. Start With Robot Data</h2>
         <p class="lead">
-          Imitation learning is easiest when you have expert demos from the exact robot, task, and environment you care about. Robotics rarely gives you enough. What is abundant is suboptimal data: non-expert teleoperation, failures, simulation, other tasks, other robots, and large mixed datasets such as Open X-Embodiment.
-        </p>
-        <p class="lead">
-          That suboptimal data is often partly useful and partly harmful. A non-expert rollout may take the right route with clumsy motion. A pick-and-place dataset may teach reliable grasps while using the wrong bin. Filtering is too blunt; co-training is too trusting. Ambient asks: <strong>at which diffusion noise levels does this suboptimal source match the target behavior?</strong>
+          Imitation learning is easiest when you have expert demos from the exact robot, task, and environment you care about. But this type of data is often scarce. What is abundant is suboptimal data: non-expert teleoperation, failures, simulation, other tasks, other robots, and large mixed datasets such as Open X-Embodiment. Some of it is useful, some of it is wrong, and Ambient asks: <strong>at which diffusion noise levels does this suboptimal source match the target behavior?</strong>
         </p>
       </div>
 
