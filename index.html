@@ -11,7 +11,7 @@
   <meta property="og:image" content="static/images/poster-teaser.jpg">
   <title>Ambient Diffusion Policy</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="static/css/site.css?v=tldr1">
+  <link rel="stylesheet" href="static/css/site.css?v=hero-tldr1">
 </head>
 <body>
   <header class="topbar">
@@ -53,7 +53,8 @@
         </div>
 
         <div class="hero-summary">
-          <span>Imperfect robot data still carries signal. Ambient uses the global-to-local structure of action diffusion to keep that signal without learning the failures.</span>
+          <span>TL;DR</span>
+          <p>Imperfect robot data still carries signal. Ambient keeps that signal without learning the failures by asking when, during diffusion training, suboptimal data looks like the target data. Instead of asking which suboptimal data to keep, Ambient asks when each source should train the diffusion policy, expanding the set of usable robot data sources. The implementation is a tiny change to the dataloader: sample the diffusion noise level first, then choose only data sources that are valid at that noise level.</p>
         </div>
 
         <div class="teaser-placeholder" role="img" aria-label="Ten second teaser video placeholder">
@@ -69,13 +70,6 @@
     </section>
 
     <section class="section" id="overview" data-section="overview">
-      <div class="container">
-        <div class="tldr-panel" aria-label="TLDR">
-          <span>TL;DR</span>
-          <p>Robot datasets are often partly useful and partly wrong. Ambient keeps the useful part by asking when, during diffusion training, suboptimal data looks like the target data. The implementation is a tiny change to the dataloader: sample the diffusion noise level first, then choose only data sources that are valid at that noise level.</p>
-        </div>
-      </div>
-
       <div class="container narrow walkthrough-start">
         <span class="section-kicker">Detailed walkthrough</span>
         <h2 class="section-title">1. Start With Robot Data</h2>
