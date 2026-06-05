@@ -318,21 +318,19 @@ h1 {
   text-align: center;
 }
 
-.brief-flow {
-  display: grid;
-  gap: 18px;
-  margin-bottom: 46px;
+.tldr-panel {
+  max-width: 980px;
+  margin: 0 auto 56px;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid #b9d4f5;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(237, 246, 255, 0.96), rgba(255, 247, 232, 0.64)),
+    #f8fbff;
+  box-shadow: 0 18px 48px rgba(42, 87, 128, 0.1);
 }
 
-.brief-intro {
-  max-width: 760px;
-  margin: 0 auto;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--line);
-  text-align: center;
-}
-
-.brief-intro span,
+.tldr-panel span,
 .section-kicker {
   color: var(--blue-dark);
   font-size: 0.78rem;
@@ -341,42 +339,12 @@ h1 {
   letter-spacing: 0;
 }
 
-.brief-intro p {
-  margin: 7px auto 0;
-  color: var(--muted);
-  font-size: 0.98rem;
-  line-height: 1.45;
-}
-
-.brief-steps {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.brief-steps article {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 18px;
-  background: #fff;
-}
-
-.brief-steps strong {
-  display: block;
-  font-size: 0.96rem;
-  line-height: 1.25;
-}
-
-.brief-steps p {
+.tldr-panel p {
+  max-width: 860px;
   margin: 9px 0 0;
-  color: var(--muted);
-  font-size: 0.88rem;
-  line-height: 1.44;
-}
-
-.brief-steps code {
-  color: var(--blue-dark);
-  font-size: 0.92em;
+  color: #243341;
+  font-size: clamp(1.02rem, 1.8vw, 1.18rem);
+  line-height: 1.58;
 }
 
 .lead {
@@ -544,7 +512,7 @@ h1 {
 .dot-field::after {
   right: 12px;
   color: #8a5a00;
-  content: "extra";
+  content: "suboptimal";
 }
 
 .dot-field i,
@@ -1183,10 +1151,6 @@ body.lightbox-open {
     grid-template-columns: 1fr;
   }
 
-  .brief-steps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .scale-card img {
     height: auto;
     min-height: 0;
@@ -1298,10 +1262,6 @@ body.lightbox-open {
   .hero-summary {
     padding: 13px 14px;
     font-size: 1rem;
-  }
-
-  .brief-steps {
-    grid-template-columns: 1fr;
   }
 
   .noise-overlap {
