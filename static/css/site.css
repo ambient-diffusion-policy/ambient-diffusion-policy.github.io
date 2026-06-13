@@ -222,8 +222,10 @@ h1 {
   background: #222a32;
   color: #fff;
   text-decoration: none;
+  font-family: inherit;
   font-size: 0.9rem;
   font-weight: 720;
+  cursor: pointer;
 }
 
 .pill.disabled {
@@ -263,6 +265,8 @@ h1 {
 }
 
 .teaser-placeholder {
+  position: relative;
+  overflow: hidden;
   width: min(940px, 100%);
   margin: 0 auto;
   border: 1px solid var(--line-strong);
@@ -272,6 +276,20 @@ h1 {
     url("../images/poster-teaser.jpg") center / cover no-repeat,
     #1f2832;
   box-shadow: var(--shadow);
+}
+
+.teaser-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: var(--orange);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 720;
+  letter-spacing: 0.01em;
+  box-shadow: 0 6px 18px rgba(18, 32, 48, 0.32);
 }
 
 .teaser-frame {
@@ -969,6 +987,101 @@ body.lightbox-open {
   text-align: center;
 }
 
+.bibtex-modal[hidden] {
+  display: none;
+}
+
+.bibtex-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 5vw, 58px);
+  background: rgba(9, 17, 27, 0.74);
+}
+
+.bibtex-modal-panel {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  width: min(760px, calc(100vw - clamp(48px, 10vw, 116px)));
+  max-height: calc(100vh - clamp(48px, 10vw, 116px));
+  padding: 22px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid rgba(202, 216, 230, 0.8);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.34);
+}
+
+.bibtex-modal-title {
+  margin: 0;
+  padding-right: 40px;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.bibtex-modal-code {
+  margin: 0;
+  max-height: 50vh;
+  overflow: auto;
+}
+
+.bibtex-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(31, 45, 59, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.bibtex-modal-close:hover,
+.bibtex-modal-close:focus-visible {
+  border-color: var(--blue);
+  color: var(--blue-dark);
+  outline: none;
+}
+
+.bibtex-copy {
+  justify-self: start;
+  min-height: 38px;
+  padding: 0 18px;
+  border: 1px solid var(--blue);
+  border-radius: 999px;
+  background: var(--blue);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 720;
+}
+
+.bibtex-copy:hover,
+.bibtex-copy:focus-visible {
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+  outline: none;
+}
+
+.bibtex-copy.copied {
+  background: var(--green);
+  border-color: var(--green);
+}
+
 .takeaway-panel {
   max-width: 980px;
   margin: 26px auto 0;
@@ -1017,6 +1130,17 @@ body.lightbox-open {
 
 .takeaway-panel strong {
   color: var(--blue-dark);
+}
+
+.takeaway-panel li.takeaway-highlight {
+  border-color: var(--green);
+  background: var(--green-soft);
+  color: #1f3a2c;
+  box-shadow: 0 8px 20px rgba(46, 125, 85, 0.16);
+}
+
+.takeaway-panel li.takeaway-highlight strong {
+  color: var(--green);
 }
 
 .faq-panel {
@@ -1070,6 +1194,12 @@ body.lightbox-open {
   color: var(--muted);
   font-size: 0.94rem;
   line-height: 1.5;
+}
+
+.faq-more {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 0.94rem;
 }
 
 .video-grid {

@@ -273,4 +273,83 @@
       }
     });
   }
+
+  const bibtexTrigger = document.getElementById("bibtex-trigger");
+  const bibtexSource = document.querySelector("#bibtex code");
+
+  if (bibtexTrigger && bibtexSource) {
+    const bibtexText = bibtexSource.textContent.trim();
+
+    const modal = document.createElement("div");
+    modal.className = "bibtex-modal";
+    modal.hidden = true;
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-label", "BibTeX citation");
+    modal.innerHTML = `
+      <div class="bibtex-modal-panel" role="document">
+        <button class="bibtex-modal-close" type="button" aria-label="Close citation">X</button>
+        <h3 class="bibtex-modal-title">Cite this paper</h3>
+        <pre class="bibtex bibtex-modal-code"><code></code></pre>
+        <button class="bibtex-copy" type="button">Copy BibTeX</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.querySelector("code").textContent = bibtexText;
+    const closeModalButton = modal.querySelector(".bibtex-modal-close");
+    const copyButton = modal.querySelector(".bibtex-copy");
+    let resetCopyTimer = null;
+
+    const closeModal = () => {
+      if (modal.hidden) return;
+      modal.hidden = true;
+      document.body.classList.remove("lightbox-open");
+      bibtexTrigger.focus({ preventScroll: true });
+    };
+
+    const openModal = () => {
+      modal.hidden = false;
+      document.body.classList.add("lightbox-open");
+      closeModalButton.focus({ preventScroll: true });
+    };
+
+    const copyBibtex = () => {
+      const done = (ok) => {
+        copyButton.textContent = ok ? "Copied!" : "Copy failed";
+        copyButton.classList.toggle("copied", ok);
+        if (resetCopyTimer) window.clearTimeout(resetCopyTimer);
+        resetCopyTimer = window.setTimeout(() => {
+          copyButton.textContent = "Copy BibTeX";
+          copyButton.classList.remove("copied");
+        }, 2000);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(bibtexText).then(() => done(true), () => done(false));
+      } else {
+        const range = document.createRange();
+        range.selectNodeContents(modal.querySelector("code"));
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        try {
+          done(document.execCommand("copy"));
+        } catch (err) {
+          done(false);
+        }
+        selection.removeAllRanges();
+      }
+    };
+
+    bibtexTrigger.addEventListener("click", openModal);
+    closeModalButton.addEventListener("click", closeModal);
+    copyButton.addEventListener("click", copyBibtex);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeModal();
+    });
+  }
 })();
