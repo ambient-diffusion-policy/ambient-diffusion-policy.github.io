@@ -203,6 +203,17 @@ h1 {
   color: var(--blue);
 }
 
+.affiliations {
+  margin: 14px 0 0;
+}
+
+.affiliations .mit-logo {
+  height: 64px;
+  width: auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .link-row {
   display: flex;
   flex-wrap: wrap;
