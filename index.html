@@ -11,7 +11,7 @@
   <meta property="og:image" content="static/images/poster-teaser.jpg">
   <title>Ambient Diffusion Policy</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="static/css/site.css?v=mitlogo2">
+  <link rel="stylesheet" href="static/css/site.css?v=teaser1">
   <style>
     /* Section 2 interval boxes — copy the step-1 caption-panel look */
     .interval-grid {
@@ -158,11 +158,13 @@
           <p>Suboptimal data in robotics still contains useful learning signal. Ambient Diffusion Policy is a principled method for extracting meaningful features from these data sources while ignoring harmful features. The algorithm leverages <em>noise-dependent data usage</em>: suboptimal samples can only contribute to training at high and low diffusion times. Its implementation is remarkably simple, requiring only a single change to the Diffusion Policy dataloader.</p>
         </div>
 
-        <div class="teaser-placeholder" role="img" aria-label="Teaser video, in progress">
-          <div class="teaser-frame">
-            <span class="teaser-banner">🚧 Video coming soon</span>
-          </div>
-        </div>
+        <figure class="teaser-video">
+          <video muted loop autoplay playsinline controls preload="metadata"
+                 poster="static/images/poster-teaser.jpg"
+                 aria-label="Ambient Diffusion Policy teaser video">
+            <source src="static/videos/teaser.mp4?v=3" type="video/mp4">
+          </video>
+        </figure>
       </div>
     </section>
 

@@ -289,6 +289,22 @@ h1 {
   box-shadow: var(--shadow);
 }
 
+.teaser-video {
+  width: min(940px, 100%);
+  margin: 0 auto;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+  box-shadow: var(--shadow);
+}
+
+.teaser-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .teaser-banner {
   display: inline-flex;
   align-items: center;
