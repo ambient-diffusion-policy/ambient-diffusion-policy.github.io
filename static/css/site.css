@@ -303,6 +303,9 @@ h1 {
   display: block;
   width: 100%;
   height: auto;
+  /* The teaser reads brighter than the rest of the page; knock the
+     brightness down a touch, leaving color/contrast untouched. */
+  filter: brightness(0.7);
 }
 
 .teaser-banner {
