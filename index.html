@@ -117,12 +117,12 @@
     </a>
     <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false">Menu</button>
     <nav class="site-nav" aria-label="Main navigation">
+      <a href="#abstract">Abstract</a>
       <a href="#overview">Overview</a>
       <a href="#method">Method</a>
       <a href="#sampler">Implementation</a>
       <a href="#experiments">Experiments</a>
       <a href="#rollouts">Example Rollouts</a>
-      <a href="#abstract">Abstract</a>
     </nav>
     <div class="read-progress" aria-hidden="true"><span></span></div>
   </header>
@@ -164,6 +164,21 @@
             <source src="static/videos/teaser.mp4?v=3" type="video/mp4">
           </video>
         </figure>
+      </div>
+    </section>
+
+    <section class="section soft" id="abstract" data-section="abstract">
+      <div class="container narrow">
+        <h2 class="section-title">Abstract</h2>
+        <p>
+          We propose Ambient Diffusion Policy, a simple and principled method for imitation learning from suboptimal data in robotics. High-quality, task-specific robot data is expensive and time-consuming to collect, while suboptimal datasets with lower-quality or out-of-distribution demonstrations are abundant. Existing methods that co-train on both data sources in robotics often fail to separate the meaningful and the harmful features in the suboptimal samples. In contrast, our method extracts only the useful features by introducing a new axis to co-training in robotics: <em>noise-dependent data usage</em>.
+        </p>
+        <p>
+          Ambient Diffusion Policy restricts the contribution of suboptimal data during training to only the high and low diffusion times. To rigorously justify our approach, we first observe that robot action data exhibits a <em>spectral power law</em>. This induces two important properties on the optimal Diffusion Policy that we exploit: a <em>global-to-local hierarchy</em> and <em>locality</em>. We theoretically formalize this discussion using a simplified model.
+        </p>
+        <p>
+          Our experiments validate Ambient Diffusion Policy on four types of suboptimal action data (noisy trajectories, sim-to-real gap, task mismatch, and large-scale data mixtures) across six tasks. The results show that it effectively learns from arbitrary sources of suboptimal data. Notably, it outperforms existing co-training baselines by up to 33% when scaled to Open X-Embodiment&mdash;a large dataset with heterogeneous data quality and unstructured distribution shifts. Overall, Ambient Diffusion Policy increases the utility of suboptimal demonstrations and expands the set of usable data sources in robotics.
+        </p>
       </div>
     </section>
 
@@ -497,21 +512,6 @@
         <div class="link-row" aria-label="Paper link">
           <a class="pill" href="https://arxiv.org/abs/2606.12365v1" target="_blank" rel="noopener">Read the paper on arXiv</a>
         </div>
-      </div>
-    </section>
-
-    <section class="section soft" id="abstract" data-section="abstract">
-      <div class="container narrow">
-        <h2 class="section-title">Abstract</h2>
-        <p>
-          We propose Ambient Diffusion Policy, a simple and principled method for imitation learning from suboptimal data in robotics. High-quality, task-specific robot data is expensive and time-consuming to collect, while suboptimal datasets with lower-quality or out-of-distribution demonstrations are abundant. Existing methods that co-train on both data sources in robotics often fail to separate the meaningful and the harmful features in the suboptimal samples. In contrast, our method extracts only the useful features by introducing a new axis to co-training in robotics: <em>noise-dependent data usage</em>.
-        </p>
-        <p>
-          Ambient Diffusion Policy restricts the contribution of suboptimal data during training to only the high and low diffusion times. To rigorously justify our approach, we first observe that robot action data exhibits a <em>spectral power law</em>. This induces two important properties on the optimal Diffusion Policy that we exploit: a <em>global-to-local hierarchy</em> and <em>locality</em>. We theoretically formalize this discussion using a simplified model.
-        </p>
-        <p>
-          Our experiments validate Ambient Diffusion Policy on four types of suboptimal action data (noisy trajectories, sim-to-real gap, task mismatch, and large-scale data mixtures) across six tasks. The results show that it effectively learns from arbitrary sources of suboptimal data. Notably, it outperforms existing co-training baselines by up to 33% when scaled to Open X-Embodiment&mdash;a large dataset with heterogeneous data quality and unstructured distribution shifts. Overall, Ambient Diffusion Policy increases the utility of suboptimal demonstrations and expands the set of usable data sources in robotics.
-        </p>
       </div>
     </section>
 
